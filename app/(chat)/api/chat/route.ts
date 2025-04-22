@@ -7,6 +7,28 @@ import { getMostRecentUserMessage } from '@/lib/utils';
 import { createMastra } from '@/mastra';
 
 export const maxDuration = 60;
+import { getChatById } from '@/db/queries';
+import { NextResponse } from 'next/server';
+
+export async function GET() {
+  try {
+    const session = await auth();
+
+    if (!session?.user?.id) {
+      return new Response('Unauthorized', { status: 401 });
+    }
+
+    const userId = session.user.id;
+    const chats = await getChatById({ id: userId });
+
+    const responseData = chats ?? [];
+
+    return NextResponse.json(responseData);
+  } catch (error) {
+    console.error('Error fetching chat history:', error);
+    return new Response('Internal Server Error', { status: 500 });
+  }
+}
 
 export async function POST(request: Request) {
   const {

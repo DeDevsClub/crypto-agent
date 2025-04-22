@@ -42,7 +42,7 @@ export function Chat({
     body: { id, modelId: selectedModelId },
     initialMessages,
     onFinish: () => {
-      mutate('/api/history');
+      mutate('/(chat)/api/history');
     },
   });
 
@@ -66,7 +66,7 @@ export function Chat({
   });
 
   const { data: votes } = useSWR<Array<Vote>>(
-    `/api/vote?chatId=${id}`,
+    `/(chat)/api/vote?chatId=${id}`,
     fetcher
   );
 
